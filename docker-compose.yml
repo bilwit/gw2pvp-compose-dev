@@ -1,0 +1,56 @@
+version: '3.3'
+
+services:
+  mongo:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    container_name: gw2pvp-database
+    image: gw2pvp-database
+    volumes:
+      - gw2pvp:/data/db
+    restart: always
+    environment: 
+      - MONGO_INITDB_DATABASE=gw2pvp
+    ports:
+      - "27017:27017"
+    networks:
+      - gw2pvp
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: dev-gw2pvp
+    volumes:
+      - ../certs/:/var/opt/certs:ro
+      - gw2pvp:/var/www/html/gw2pvp/
+      - ~/.ssh/:/root/.ssh/
+    ports:
+      - "555:557"
+      - "554:556"
+      - "3000:3000"
+    restart: "no"
+    working_dir: /var/www/html/gw2pvp
+    depends_on:
+      - mongo
+    stdin_open: true
+    environment:
+      - SHELL=/bin/ash
+    networks:
+      - gw2pvp
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+
+networks:
+  gw2pvp:
+    driver: bridge
+    
+volumes:
+  gw2pvp-database:
+  dev-gw2pvp-server:
