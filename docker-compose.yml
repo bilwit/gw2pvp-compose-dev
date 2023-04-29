@@ -8,12 +8,12 @@ services:
     container_name: gw2pvp-database
     image: gw2pvp-database
     volumes:
-      - gw2pvp:/data/db
+      - gw2pvp-database:/data/db
     restart: always
     environment: 
       - MONGO_INITDB_DATABASE=gw2pvp
     ports:
-      - "27017:27017"
+      - "27018:27018"
     networks:
       - gw2pvp
     logging:
@@ -24,15 +24,15 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: dev-gw2pvp
+    container_name: gw2pvp-server-dev
     volumes:
       - ../certs/:/var/opt/certs:ro
-      - gw2pvp:/var/www/html/gw2pvp/
+      - gw2pvp-server-dev:/var/www/html/gw2pvp/
       - ~/.ssh/:/root/.ssh/
     ports:
-      - "555:557"
-      - "554:556"
-      - "3000:3000"
+      - "557:557"
+      - "556:556"
+      - "3001:3001"
     restart: "no"
     working_dir: /var/www/html/gw2pvp
     depends_on:
@@ -53,4 +53,4 @@ networks:
     
 volumes:
   gw2pvp-database:
-  dev-gw2pvp-server:
+  gw2pvp-server-dev:

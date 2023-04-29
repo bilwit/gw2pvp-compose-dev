@@ -1,5 +1,7 @@
 FROM mongo:4.0.10
 
+WORKDIR /data/db
+
 # ADD ./db.tar.gz /data/db
 
 # Initialize db default values
